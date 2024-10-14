@@ -18,6 +18,9 @@ jobs:
       - name: Install Dependencies
         working-directory: .
         run: npm install
+        
+      - name: Ensure Config Directory Exists
+        run: mkdir -p ./src/config
 
       - name: Decode Config Secret
         id: decode-config
