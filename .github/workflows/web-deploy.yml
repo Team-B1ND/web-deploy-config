@@ -20,10 +20,8 @@ jobs:
 
       - name: Create Destination Directory If Not Exists
         run: |
-          echo "Creating destination directory if it doesn't exist: ${{ env.DESTINATION_DIRECTORY }}"
-          ssh -i ${{ secrets.SERVER_SSH_KEY }} user@your-server "mkdir -p ${{ env.DESTINATION_DIRECTORY }}"
+          ssh -i ${{ secrets.SERVER_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ${{ env.DESTINATION_DIRECTORY }}"
 
       - name: Deploy Files to Server
         run: |
-          echo "Deploying files from ${{ env.SOURCE_DIRECTORY }} to ${{ env.DESTINATION_DIRECTORY }}"
           rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" ${{ env.SOURCE_DIRECTORY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ env.DESTINATION_DIRECTORY }}
