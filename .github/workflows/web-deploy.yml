@@ -37,7 +37,7 @@ jobs:
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.EC2_KEY }}
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
       - name: Create Destination Directory If Not Exists
         run: |
