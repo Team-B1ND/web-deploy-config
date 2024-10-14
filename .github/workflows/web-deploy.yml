@@ -26,7 +26,8 @@ jobs:
         id: decode-config
         run: |
           echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config/temp_config.json
-
+          cat ./src/config/temp_config.json
+          
       - name: Validate Config JSON
         run: |
           if ! jq empty ./src/config/temp_config.json; then
