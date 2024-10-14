@@ -22,26 +22,13 @@ jobs:
       - name: Ensure Config Directory Exists
         run: mkdir -p ./src/config
 
-      - name: Decode Config Secret
-        id: decode-config
-        run: |
-          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config/temp_config.json
-          cat ./src/config/temp_config.json
-          
-      - name: Validate Config JSON
-        run: |
-          if ! jq empty ./src/config/temp_config.json; then
-            echo "Invalid JSON format in temp_config.json"
-            exit 1
-          fi
-
       - name: Set Config Json File
         id: create-json 
         uses: jsdaniell/create-json@v1.2.2 
         with:
-          name: "config.json"  # 생성할 파일 이름
-          json: ${{ steps.decode-config.outputs.result }}
-          dir: './src/config'  # 파일이 생성될 디렉토리
+          name: "config.json" 
+          json: ${{ github.event.client_payload.config_secret }}
+          dir: './src/config' 
 
       - name: Build Project
         working-directory: .
