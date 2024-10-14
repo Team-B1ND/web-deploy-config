@@ -16,10 +16,14 @@ jobs:
           ref: ${{ github.event.client_payload.branch }}
           token: ${{ secrets.GIT_ACCESS_TOKEN }}
 
-      - name: Create config.json from Secret
-        run: |
-          echo "${{ github.event.client_payload.config_secret }}" > ./src/lib/axios/config.json
-
+      - name: Set Config JSON File
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "config.json"
+          json: ${{ secrets.CONFIG_JSON }}
+          dir: "./src/lib/axios/"
+          
       - name: Install Dependencies
         run: |
           npm install
