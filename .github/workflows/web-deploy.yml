@@ -18,13 +18,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Create Required Directories
-        run: mkdir -p ./src/lib/axios
-
       - name: Decode Config Secret
         id: decode-config
         run: |
-          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/lib/axios/config.json
+          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config.json
 
       - name: Build Project
         run: npm run build
