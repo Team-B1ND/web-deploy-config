@@ -26,4 +26,4 @@ jobs:
       - name: Deploy Files to Server
         run: |
           echo "Deploying files from ${{ env.SOURCE_DIRECTORY }} to ${{ env.DESTINATION_DIRECTORY }}"
-          rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" ${{ env.SOURCE_DIRECTORY }} user@your-server:${{ env.DESTINATION_DIRECTORY }}
+          rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" ${{ env.SOURCE_DIRECTORY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ env.DESTINATION_DIRECTORY }}
