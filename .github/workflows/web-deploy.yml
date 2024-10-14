@@ -22,6 +22,11 @@ jobs:
       - name: Ensure Config Directory Exists
         run: mkdir -p ./src/config
 
+      - name: Log Config Secret
+        run: |
+          echo "${{ github.event.client_payload.config_secret }}" > ./src/config/config_secret.txt
+          cat ./src/config/config_secret.txt
+
       - name: Set Config Json File
         id: create-json 
         uses: jsdaniell/create-json@v1.2.2 
