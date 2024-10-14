@@ -16,6 +16,7 @@ jobs:
           ref: ${{ github.event.client_payload.branch }}
 
       - name: Install Dependencies
+        working-directory: .
         run: npm install
 
       - name: Decode Config Secret
@@ -24,6 +25,7 @@ jobs:
           echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config.json
 
       - name: Build Project
+        working-directory: .
         run: npm run build
 
       - name: Create Destination Directory If Not Exists
