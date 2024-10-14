@@ -9,19 +9,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Code Repository
         uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.client_payload.repo_name }}
+          ref: ${{ github.event.client_payload.branch }}
+          token: ${{ secrets.GIT_ACCESS_TOKEN }}
 
-      - name: Extract Payload Values
-        id: extract-payload
-        run: |
-          echo "SOURCE_DIRECTORY=${{ github.event.client_payload.source_directory }}" >> $GITHUB_ENV
-          echo "DESTINATION_DIRECTORY=${{ github.event.client_payload.destination_directory }}" >> $GITHUB_ENV
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
 
       - name: Create Destination Directory If Not Exists
         run: |
-          ssh -i ${{ secrets.SERVER_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ${{ env.DESTINATION_DIRECTORY }}"
+          ssh -i ${{ secrets.SERVER_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ${{ github.event.client_payload.destination_directory }}"
 
       - name: Deploy Files to Server
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" ${{ env.SOURCE_DIRECTORY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ env.DESTINATION_DIRECTORY }}
+          rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" ./build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ github.event.client_payload.destination_directory }}
