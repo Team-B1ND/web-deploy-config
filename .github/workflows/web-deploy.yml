@@ -22,13 +22,7 @@ jobs:
       - name: Decode Config Secret
         id: decode-config
         run: |
-          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config.json
-
-      - name: Check Current Directory
-        run: pwd
-
-      - name: List Files
-        run: ls -R
+          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config/config.json
 
       - name: Build Project
         working-directory: .
