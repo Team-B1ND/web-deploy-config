@@ -21,8 +21,7 @@ jobs:
       - name: Decode Config Secret
         id: decode-config
         run: |
-          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/lib/axios/config.json
-          cat ./src/lib/axios/config.json  # 파일 내용을 출력해 확인
+          echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ${{ github.event.client_payload.repo_name }}/src/lib/axios/config.json
       - name: Build Project
         run: npm run build
 
