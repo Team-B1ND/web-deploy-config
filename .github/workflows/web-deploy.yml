@@ -22,10 +22,6 @@ jobs:
       - name: Ensure Config Directory Exists
         run: mkdir -p ./src/config
 
-      - name: Log Config Secret
-        run: |
-          echo "${{ github.event.client_payload.config_secret }}"
-
       - name: Set Config Json File
         id: create-json 
         uses: jsdaniell/create-json@v1.2.2 
@@ -38,13 +34,18 @@ jobs:
         working-directory: .
         run: npm run build
 
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_KEY }}
+
       - name: Create Destination Directory If Not Exists
         run: |
-          ssh -i ${{ secrets.SERVER_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
           "mkdir -p ${{ github.event.client_payload.destination_directory }}"
 
       - name: Deploy Files to Server
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" \
+          rsync -avz -e "ssh" \
           ./${{ github.event.client_payload.source_directory }}/ \
           ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ github.event.client_payload.destination_directory }}
