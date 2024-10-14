@@ -24,8 +24,7 @@ jobs:
 
       - name: Log Config Secret
         run: |
-          echo "${{ github.event.client_payload.config_secret }}" > ./src/config/config_secret.json
-          cat ./src/config/config_secret.json
+          cat {{ github.event.client_payload.config_secret }}
 
       - name: Set Config Json File
         id: create-json 
