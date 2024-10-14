@@ -42,7 +42,8 @@ jobs:
       - name: Create Destination Directory If Not Exists
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-          "mkdir -p ${{ github.event.client_payload.destination_directory }}"
+          "sudo mkdir -p ${{ github.event.client_payload.destination_directory }}"
+
 
       - name: Deploy Files to Server
         run: |
