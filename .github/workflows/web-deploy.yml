@@ -24,6 +24,12 @@ jobs:
         run: |
           echo "${{ github.event.client_payload.config_secret }}" | base64 --decode > ./src/config.json
 
+      - name: Check Current Directory
+        run: pwd
+
+      - name: List Files
+        run: ls -R
+
       - name: Build Project
         working-directory: .
         run: npm run build
