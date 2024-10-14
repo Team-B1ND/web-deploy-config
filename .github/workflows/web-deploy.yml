@@ -9,23 +9,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code Repository
+      - name: Checkout A Repo Code
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.client_payload.repo_name }}
           ref: ${{ github.event.client_payload.branch }}
           token: ${{ secrets.GIT_ACCESS_TOKEN }}
 
+      - name: Create config.json from Secret
+        run: |
+          echo "${{ github.event.client_payload.config_secret }}" > ./src/lib/axios/config.json
+
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install
 
       - name: Build Project
-        run: npm run build
+        run: |
+          npm run build
 
       - name: Create Destination Directory If Not Exists
         run: |
-          ssh -i ${{ secrets.SERVER_SSH_KEY }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p ${{ github.event.client_payload.destination_directory }}"
+          ssh -i "${{ secrets.SERVER_SSH_KEY }}" "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+          "mkdir -p '${{ github.event.client_payload.destination_directory }}'"
 
       - name: Deploy Files to Server
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.SERVER_SSH_KEY }}" ./build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ github.event.client_payload.destination_directory }}
+          rsync -avz -e "ssh -i '${{ secrets.SERVER_SSH_KEY }}'" \
+          a-repo-code/build/ "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ github.event.client_payload.destination_directory }}"
