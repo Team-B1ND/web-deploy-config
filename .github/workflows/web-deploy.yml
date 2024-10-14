@@ -44,9 +44,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
           "sudo mkdir -p ${{ github.event.client_payload.destination_directory }}"
 
-
       - name: Deploy Files to Server
         run: |
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
+          --rsync-path="sudo rsync" \
           ./${{ github.event.client_payload.source_directory }}/ \
           ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ github.event.client_payload.destination_directory }}
