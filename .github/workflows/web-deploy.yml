@@ -15,14 +15,8 @@ jobs:
       - name: Extract Payload Values
         id: extract-payload
         run: |
-          echo "BUILD_COMMAND=${{ github.event.client_payload.build_command }}" >> $GITHUB_ENV
           echo "SOURCE_DIRECTORY=${{ github.event.client_payload.source_directory }}" >> $GITHUB_ENV
           echo "DESTINATION_DIRECTORY=${{ github.event.client_payload.destination_directory }}" >> $GITHUB_ENV
-
-      - name: Build Project
-        run: |
-          echo "Running build command: ${{ env.BUILD_COMMAND }}"
-          eval "${{ env.BUILD_COMMAND }}"
 
       - name: Create Destination Directory If Not Exists
         run: |
