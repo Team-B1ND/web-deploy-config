@@ -20,7 +20,6 @@ jobs:
         run: |
           echo "SOURCE_DIRECTORY=${{ github.event.client_payload.source_directory }}" >> $GITHUB_ENV
           echo "DESTINATION_DIRECTORY=${{ github.event.client_payload.destination_directory }}" >> $GITHUB_ENV
-          echo "CONFIG_SECRET=${{ github.event.client_payload.config_secret }}" >> $GITHUB_ENV
           echo "PROJECT_NAME=${{ github.event.client_payload.project_name }}" >> $GITHUB_ENV
 
       - name: Install Dependencies
@@ -35,7 +34,7 @@ jobs:
         uses: jsdaniell/create-json@v1.2.2 
         with:
           name: "config.json" 
-          json: $CONFIG_SECRET
+          json: ${{ github.event.client_payload.config_secret }}
           dir: './src/config' 
 
       - name: Build Project
