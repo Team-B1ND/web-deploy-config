@@ -54,4 +54,4 @@ jobs:
       - name: Nginx Reload
         run: |
           echo "/home/${{ secrets.EC2_USER }}/docker/nginx-docker-compose.yml"
-          docker compose -f /home/${{ secrets.EC2_USER }}/docker/nginx-docker-compose.yml restart nginx
+          docker compose -f /home/ubuntu/docker/nginx-docker-compose.yml restart nginx
