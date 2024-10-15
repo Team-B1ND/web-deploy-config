@@ -1,4 +1,5 @@
 name: Deploy Web Project
+run-name: "${{ github.event.client_payload.title }}"
 
 on:
   repository_dispatch:
@@ -7,9 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    name: "${{ github.event.client_payload.title }}"
-
+    
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v2
