@@ -8,6 +8,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    name: "${{ github.event.client_payload.title }}"
+
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v2
