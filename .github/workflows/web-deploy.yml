@@ -15,6 +15,14 @@ jobs:
           repository: ${{ github.event.client_payload.repo_name }}
           ref: ${{ github.event.client_payload.branch }}
 
+      - name: Set Environment Variables
+        id: set-env
+        run: |
+          echo "SOURCE_DIRECTORY=${{ github.event.client_payload.source_directory }}" >> $GITHUB_ENV
+          echo "DESTINATION_DIRECTORY=${{ github.event.client_payload.destination_directory }}" >> $GITHUB_ENV
+          echo "CONFIG_SECRET=${{ github.event.client_payload.config_secret }}" >> $GITHUB_ENV
+          echo "PROJECT_NAME=${{ github.event.client_payload.project_name }}" >> $GITHUB_ENV
+
       - name: Install Dependencies
         working-directory: .
         run: npm install
@@ -27,7 +35,7 @@ jobs:
         uses: jsdaniell/create-json@v1.2.2 
         with:
           name: "config.json" 
-          json: ${{ github.event.client_payload.config_secret }}
+          json: $CONFIG_SECRET
           dir: './src/config' 
 
       - name: Build Project
@@ -42,14 +50,14 @@ jobs:
       - name: Create Destination Directory If Not Exists
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-          "sudo mkdir -p ${{ secrets.DOCKER_VOLUMES_PATH }}/$(echo '${{ github.event.client_payload.destination_directory }}')"
+          "sudo mkdir -p ${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.project_name }}/_data/${{ env.DESTINATION_DIRECTORY }}"
 
       - name: Deploy Files to Server
         run: |
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
           --rsync-path="sudo rsync" \
-          ./${{ github.event.client_payload.source_directory }}/ \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.DOCKER_VOLUMES_PATH }}/$(echo '${{ github.event.client_payload.destination_directory }}')
+          ./${{ env.SOURCE_DIRECTORY }}/ \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.project_name }}/_data/${{ env.DESTINATION_DIRECTORY }}
       
       - name: Nginx Reload
         run: |
