@@ -1,5 +1,5 @@
 name: Deploy Web Project
-run-name: "${{ github.event.client_payload.title }}"
+run-name: "[${{ github.event.client_payload.repo_name }}] ${{ github.event.client_payload.title }}"
 
 on:
   repository_dispatch:
