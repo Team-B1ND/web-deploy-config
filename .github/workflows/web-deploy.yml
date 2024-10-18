@@ -22,11 +22,8 @@ jobs:
           echo "SOURCE_DIRECTORY=${{ github.event.client_payload.source_directory }}" >> $GITHUB_ENV
           echo "DESTINATION_DIRECTORY=${{ github.event.client_payload.destination_directory }}" >> $GITHUB_ENV
           echo "PROJECT_NAME=${{ github.event.client_payload.project_name }}" >> $GITHUB_ENV
+          echo "PACKAGE_MANAGER=${{ github.event.client_payload.package_manager }}" >> $GITHUB_ENV
 
-      - name: Install Dependencies
-        working-directory: .
-        run: npm install
-        
       - name: Ensure Config Directory Exists
         run: mkdir -p ./src/config
 
@@ -37,10 +34,14 @@ jobs:
           name: "config.json" 
           json: ${{ github.event.client_payload.config_secret }}
           dir: './src/config' 
+          
+      - name: Install Dependencies
+        run: |
+          ${{ env.PACKAGE_MANAGER }} install
 
       - name: Build Project
-        working-directory: .
-        run: npm run build
+        run: |
+          ${{ env.PACKAGE_MANAGER }} run build
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.5.3
