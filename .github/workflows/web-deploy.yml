@@ -23,6 +23,7 @@ jobs:
           echo "DESTINATION_DIRECTORY=${{ github.event.client_payload.destination_directory }}" >> $GITHUB_ENV
           echo "PROJECT_NAME=${{ github.event.client_payload.project_name }}" >> $GITHUB_ENV
           echo "PACKAGE_MANAGER=${{ github.event.client_payload.package_manager }}" >> $GITHUB_ENV
+          echo "BUILD_COMMAND=${{ github.event.client_payload.build_command }}" >> $GITHUB_ENV
 
       - name: Ensure Config Directory Exists
         run: mkdir -p ./src/config
@@ -41,7 +42,7 @@ jobs:
 
       - name: Build Project
         run: |
-          ${{ env.PACKAGE_MANAGER }} run build
+          ${{ env.BUILD_COMMAND }}
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.5.3
