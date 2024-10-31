@@ -40,7 +40,6 @@ jobs:
         run: |
           ${{ env.PACKAGE_MANAGER_CONFIG_COMMAND }}
           ${{ env.PACKAGE_MANAGER }} install
-          ${{ env.PACKAGE_MANAGER }} start
           
       - name: Build Project
         run: |
