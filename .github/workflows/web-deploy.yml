@@ -65,4 +65,4 @@ jobs:
       - name: Nginx Reload
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-          "docker compose -f /home/${{ secrets.EC2_USER }}/docker/nginx-docker-compose.yml restart nginx"
+          "docker compose -f /home/${{ secrets.EC2_USER }}/docker/infrastructure-docker-compose.yml restart nginx"
