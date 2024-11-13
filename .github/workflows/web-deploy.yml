@@ -53,14 +53,14 @@ jobs:
       - name: Create Destination Directory If Not Exists
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-          "sudo mkdir -p ${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.project_name }}/_data/${{ env.DESTINATION_DIRECTORY }}"
+          "sudo mkdir -p ${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.PROJECT_NAME }}/_data/${{ env.DESTINATION_DIRECTORY }}"
 
       - name: Deploy Files to Server
         run: |
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
           --rsync-path="sudo rsync" \
           ./${{ env.SOURCE_DIRECTORY }}/ \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.project_name }}/_data/${{ env.DESTINATION_DIRECTORY }}
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.PROJECT_NAME }}/_data/${{ env.DESTINATION_DIRECTORY }}
       
       - name: Nginx Reload
         run: |
