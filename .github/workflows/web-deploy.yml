@@ -43,6 +43,7 @@ jobs:
           
       - name: Build Project
         run: |
+          ${{ env.PACKAGE_MANAGER }} run lint --rule 'no-unused-vars: off' --rule '@typescript-eslint/no-non-null-assertion: off' 
           ${{ env.PACKAGE_MANAGER }} run build
 
       - name: Add SSH key
