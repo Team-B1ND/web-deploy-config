@@ -43,7 +43,7 @@ jobs:
           
       - name: Build Project
         run: | 
-          ${{ env.PACKAGE_MANAGER }} run lint
+          ${{ env.PACKAGE_MANAGER }} run lint --fix
           ${{ env.PACKAGE_MANAGER }} run build
 
       - name: Add SSH key
