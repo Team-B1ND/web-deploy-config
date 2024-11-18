@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off" // 규칙 비활성화
+  }
+}
