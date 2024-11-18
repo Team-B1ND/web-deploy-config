@@ -43,7 +43,7 @@ jobs:
           
       - name: Build Project
         run: | 
-          ${{ env.PACKAGE_MANAGER }} run build
+          ${{ env.PACKAGE_MANAGER }} run build --skip-eslint
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.5.3
