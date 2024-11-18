@@ -1,5 +1,5 @@
 name: Deploy Web Project
-run-name: "[${{ github.event.client_payload.repo_name }}] ${{ github.event.client_payload.title }}"
+run-name: '[${{ github.event.client_payload.repo_name }}] ${{ github.event.client_payload.title }}'
 
 on:
   repository_dispatch:
@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v2
@@ -29,21 +29,21 @@ jobs:
         run: mkdir -p ./src/config
 
       - name: Set Config Json File
-        id: create-json 
-        uses: jsdaniell/create-json@v1.2.2 
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
         with:
-          name: "config.json"
+          name: 'config.json'
           json: ${{ github.event.client_payload.config_secret }}
           dir: './src/config'
-          
+
       - name: Install Dependencies
         run: |
           ${{ env.PACKAGE_MANAGER_CONFIG_COMMAND }}
           ${{ env.PACKAGE_MANAGER }} install
-          
+
       - name: Build Project
-        run: | 
-          ${{ env.PACKAGE_MANAGER }} run build --skip-eslint
+        run: |
+          ${{ env.PACKAGE_MANAGER }} run build
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.5.3
@@ -61,7 +61,7 @@ jobs:
           --rsync-path="sudo rsync" \
           ./${{ env.SOURCE_DIRECTORY }}/ \
           ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.DOCKER_VOLUMES_PATH }}/${{ env.PROJECT_NAME }}/_data/${{ env.DESTINATION_DIRECTORY }}
-      
+
       - name: Nginx Reload
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
